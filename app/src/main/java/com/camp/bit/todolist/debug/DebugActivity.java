@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +15,13 @@ import android.widget.Toast;
 
 import com.camp.bit.todolist.R;
 
+import java.awt.font.TextAttribute;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,6 +29,7 @@ import java.util.Map;
 public class DebugActivity extends AppCompatActivity {
 
     private static int REQUEST_CODE_STORAGE_PERMISSION = 1001;
+    private static final String TAG = DebugActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +73,91 @@ public class DebugActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO 把一段文本写入某个存储区的文件中，再读出来，显示在 fileText 上
-                fileText.setText("TODO");
+                String content = pathText.getText().toString();
+
+                File filesDir = getFilesDir();
+//                File filesDir = getExternalFilesDir(null);
+//                File filesDir = Environment.getExternalStorageDirectory();
+
+                try {
+                    Log.d(TAG, "fileDirs: " + filesDir.getCanonicalPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File writeToFile = new File(filesDir, "test.txt");
+
+                String[] contents = content.split("\n");
+
+                //write text to (internal filesDir) test.txt
+                FileWriter fileWriter = null;
+                BufferedWriter bufferedWriter = null;
+                try {
+                    fileWriter = new FileWriter(writeToFile);
+                    bufferedWriter = new BufferedWriter(fileWriter);
+
+                    for (String c : contents) {
+                        bufferedWriter.write(c);
+                        bufferedWriter.newLine();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (bufferedWriter != null) {
+                        try {
+                            bufferedWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (fileWriter != null) {
+                        try {
+                            fileWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                //read text from (internal filesDir) test.txt
+                FileReader fileReader = null;
+                BufferedReader bufferedReader = null;
+
+                File readFromFile = new File(filesDir, "test.txt");
+                String text = null;
+                try {
+                    fileReader = new FileReader(readFromFile);
+                    bufferedReader = new BufferedReader(fileReader);
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line);
+                        sb.append("\n");
+                    }
+                    text = sb.toString();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (bufferedReader != null) {
+                        try {
+                            bufferedReader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (fileReader != null) {
+                        try {
+                            fileReader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                if (text != null) {
+                    fileText.setText(text);
+                } else {
+                    fileText.setText("fail in writing file or reading file");
+                }
             }
         });
     }
