@@ -13,6 +13,15 @@ public class Note {
     private Date date;
     private State state;
     private String content;
+    private Priority priority;
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
 
     public Note(long id) {
         this.id = id;
@@ -40,5 +49,16 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", date=" + date +
+                ", state=" + state +
+                ", content='" + content + '\'' +
+                ", priority=" + priority +
+                '}';
     }
 }
