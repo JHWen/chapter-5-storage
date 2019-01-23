@@ -15,11 +15,9 @@ import android.widget.Toast;
 
 import com.camp.bit.todolist.R;
 
-import java.awt.font.TextAttribute;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
