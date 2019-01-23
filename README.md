@@ -280,9 +280,9 @@ public enum Priority {
 3. 增加了一个字段，在数据库操作上进行了小幅的改动，如查询操作；在添加note的界面上添加了三个RadioButton控件，用于设置优先级。
 
 <p align="center">
-    <img src="https://s23.aconvert.com/convert/p3r68-cdx67/yhr9b-lfboi.gif" alt="Sample"  width="300" height="500">
+    <img src="./pic/take_a_note.jpg" alt="Sample"  width="300" height="500">
     <p align="center">
-        <em>app demo</em>
+        <em>take a note</em>
     </p>
 </p>
 
